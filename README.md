@@ -1,5 +1,7 @@
 # master_plan
 
+### Flutter、Freezed、Riverpodにて作成中の「Todo]系アプリです。pubspec.yamlのバージョンの問題（バージョンが古すぎる）でToJsonのファンクションがcode-genされない状況でしたが、Github Issuesにてアドバイスをもらいましたので、バージョンを最新のにします。少々お待ちください。 Github Issueのリンク：https://github.com/google/json_serializable.dart/issues/973
+
 A new Flutter project.
 
 ## Getting Started
