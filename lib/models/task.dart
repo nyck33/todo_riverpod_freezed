@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_serializable/json_serializable.dart';
-import 'package:json_annotation/json_annotation.dart';
+//import 'package:json_serializable/json_serializable.dart';
+//import 'package:json_annotation/json_annotation.dart';
 
 import 'package:flutter/foundation.dart';
 
@@ -19,9 +19,13 @@ class Task with _$Task {
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TaskToJson(this);
+  //Map<String, dynamic> toJson() => _$TaskToJson(this);
 
   String get description => this.description;
   bool get complete => this.complete;
 
+  @override
+  String toString() {
+    return "Task is $description, complete is $complete";
+  }
 }

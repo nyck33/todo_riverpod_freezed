@@ -17,40 +17,33 @@ class PlanCreatorScreen extends ConsumerStatefulWidget {
 }
 
 class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
+  //List<Plan> _plans; //= ref.watch(plansProvider.notifier);
+
   //for creating simple Textfields for new plans
   final textController = TextEditingController();
-
-  //@override
-  //void initState() {
-  //super.initState();
-  //ref.watch(plansProvider);
-  //or
-  //ref.read(plansProvider);
-  //}
 
   @override
   Widget build(BuildContext context) {
     //this gives me the List<Plan>
     final List<Plan> plans = ref.watch(plansProvider);
+    //_plans = ref.watch(plansProvider);
     print('plancreator build: $plans');
     //final plans = ref.watch(plansProvider);
     //next way with "notifier" can pick which state to get
     //final plans = ref.read(plansProvider.notifier).plans;
 
-    //this doesn't work
-    //StateNotifier<List<Plan>> plans = ref.watch(plansProvider.notifier);
     return Scaffold(
       appBar: AppBar(title: Text('Master Plans')),
       body: Column(
         children: <Widget>[
-          _buildListCreator(), //textfield and func to add plan on tap
+          _buildPlanCreator(), //textfield and func to add plan on tap
           Expanded(child: _buildMasterPlans()),
         ],
       ),
     );
   }
 
-  Widget _buildListCreator() {
+  Widget _buildPlanCreator() {
     return Padding(
         padding: const EdgeInsets.all(20.0),
         child: Material(
@@ -88,10 +81,7 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
     //ref.listen<List<Plan>>(plansProvider, (List<Plan> plans) {
     //final plan = Plan()..name = text;
     //plans = [...plans, plan];
-    //});
 
-    //StateController<List<dynamic>> plans = ref.watch(plansProvider.notifier);
-    //});
     textController.clear();
     //request focus
     FocusScope.of(context).requestFocus(FocusNode());
@@ -103,10 +93,6 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
     //final plans = ref.read(plansProvider.notifier).plans;
 
     final plans = ref.watch(plansProvider.notifier).plans;
-
-    //ref.listen<List<Plan>>(plansProvider, (List<Plan> plans){
-    //cannot return Widget as return type is void for closure's context
-    //});
 
     if (plans.isEmpty) {
       return Column(

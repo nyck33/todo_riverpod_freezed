@@ -11,10 +11,11 @@ import 'package:flutter/material.dart';
 import '../plan_provider.dart';
 
 class PlanScreen extends ConsumerStatefulWidget {
-  final Plan? plan; //referred to by widget.plan! later
-  final String? planName;
+  //final Plan plan; //referred to by widget.plan! later
+  final Plan plan;
+  final String planName;
   //instantiae PlanScreen with instance of Plan as member
-  const PlanScreen({Key? key, @required this.plan, @required this.planName})
+  PlanScreen({Key? key, required this.plan, required this.planName})
       : super(key: key);
 
   @override
@@ -23,13 +24,12 @@ class PlanScreen extends ConsumerStatefulWidget {
 }
 
 class _PlanScreenState extends ConsumerState<PlanScreen> {
-  //list of tasks
-  //final plan = Plan();
   //get rid of keyboard on iOS by removing focus from textfield
   late ScrollController scrollController;
   //getter for plan, so widget refers to this object's instance
-  Plan get plan => widget.plan!;
-  String get planName => widget.plan!.name;
+  Plan get plan => widget.plan;
+  List<Task> get tasks => widget.plan.tasks;
+  String get planName => widget.plan.name;
 
   @override
   void initState() {
@@ -48,11 +48,14 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final planController = ref.watch(plansProvider.notifier);
+    final plans = ref.watch(plansProvider.notifier).plans;
+
     return Scaffold(
-      appBar: AppBar(title: Text("plan: $planName")), //change to plan name
+      appBar: AppBar(title: Text("plan: $planName")),
       body: Column(
         children: [
-          Expanded(child: _buildList()),
+          Expanded(child: _buildTasksList()),
           SafeArea(child: Text(plan.completenessMessage))
         ],
       ),
@@ -61,46 +64,71 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
   }
 
   Widget _buildAddTaskButton() {
+    final plans = ref.watch(plansProvider.notifier).plans;
+    late final Plan thisPlan;
+    for (Plan p in plans) {
+      if (p.name == planName) {
+        thisPlan = p;
+      }
+    }
+    final thisTasks = thisPlan.tasks;
+    final planController = ref.watch(plansProvider.notifier);
+
     return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
           setState(() {
-            plan.tasks.add(Task());
+            print('before plan.tasks: ${plan.tasks}');
+            planController.createNewTask(plan);
+            //plan.tasks.add(Task());
+
+            print('after plan.tasks: ${plan.tasks}');
           });
         });
   }
 
-  Widget _buildList() {
+  Widget _buildTasksList() {
+    final plans = ref.watch(plansProvider.notifier).plans;
+    late final Plan thisPlan;
+    for (Plan p in plans) {
+      if (p.name == planName) {
+        thisPlan = p;
+      }
+    }
+
     return ListView.builder(
         controller: scrollController,
-        itemCount: plan.tasks.length,
+        itemCount: thisPlan.tasks.length,
         //param context not needed?
         itemBuilder: (_, index) => _buildTaskTile(
-              plan.tasks[index],
+              thisPlan.tasks[index],
             ));
   }
 
   Widget _buildTaskTile(Task task) {
+    late Task newTask;
     return ListTile(
       leading: Checkbox(
           //read boolean value in data model
           value: task.complete,
           //(va) returned from widget view
           onChanged: (selected) {
-            //selected is also bool
-            //set the value in data model
+            newTask = Task(description: task.description, complete: selected!);
             setState(() {
               print('selected: $selected, task: ${task.description}'); //t or f
-              //task.complete = selected!;
-              task = task.copyWith(complete: selected!);
+              task = newTask;
+              print('checkbox task: $task');
             });
           }),
       title: TextFormField(
         initialValue: task.description,
         onFieldSubmitted: (text) {
+          newTask = Task(description: text, complete: task.complete);
           setState(() {
             //task.description = text;
-            task = task.copyWith(description: text);
+            //task = task.copyWith(description: text);
+            task = newTask;
+            print('task.description: $task');
           });
         },
       ),

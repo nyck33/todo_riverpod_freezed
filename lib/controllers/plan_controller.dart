@@ -11,26 +11,30 @@ import '../controllers/plan_controller.dart';
 import '../models/data_layer.dart';
 
 class PlanController extends StateNotifier<List<Plan>> {
-  final _plans = <Plan>[];
+  List _plans = <Plan>[];
 
-  PlanController() : super([]);
+  PlanController(this._plans) : super([]);
 
   //This public getter cannot be modified by any other object
-  List<Plan> get plans => List.unmodifiable(_plans);
-
+  //List<Plan> get plans => List.unmodifiable(_plans);
+  List<dynamic> get plans => _plans;
   void addNewPlan(String name) {
     if (name.isEmpty) {
       return;
     }
     name = _checkForDuplicates(_plans.map((plan) => plan.name), name);
-    //found duplicate or not update or not name
-    //final plan = Plan()..name = name;
-    final plan = Plan(name: name);
-    _plans.add(plan);
+
+    List<Plan> newPlanList = [..._plans, Plan(name: name)];
+    _plans = newPlanList;
   }
 
   void deletePlan(Plan plan) {
-    _plans.remove(plan);
+    //_plans.remove(plan);
+    List<Plan> newPlanList = [
+      for (Plan p in plans)
+        if (p.name != plan.name) p
+    ];
+    _plans = newPlanList;
   }
 
   void createNewTask(Plan plan, [String? description]) {
@@ -40,18 +44,21 @@ class PlanController extends StateNotifier<List<Plan>> {
 
     description = _checkForDuplicates(
         plan.tasks.map((task) => task.description), description);
-
-    //final task = Task()..description = description;
-    final task = Task(description: description);
-    //can't use setter for final field but can add to the list
-    plan.tasks.add(task);
-    //List<Task> tasks = plan.tasks;
-    //plan.tasks = [...(plan.tasks), task];
+    bool complete = false;
+    final Task newTask = Task(description: description, complete: complete);
+    List<Task> newTaskList = [...plan.tasks, newTask];
+    Plan newPlan = Plan(name: plan.name, tasks: newTaskList);
+    //remove the plan, and add a new Plan with newTaskList
+    _plans = [
+      for (Plan p in _plans)
+        {
+          if (p.name == plan.name)
+            newPlan.copyWith(name: plan.name, tasks: newTaskList)
+          else
+            p
+        }
+    ];
   }
-
-  //void deleteTask(Plan plan, Task task) {
-  //plan.tasks.remove(task);
-  //}
 
   void deleteTask(Plan plan, Task task) => [
         for (var t in plan.tasks)

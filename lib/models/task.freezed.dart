@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'task.dart';
 
@@ -115,11 +116,10 @@ class __$TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Task extends _Task with DiagnosticableTreeMixin {
+class _$_Task extends _Task {
   const _$_Task({this.description = '', this.complete = false}) : super._();
 
-  factory _$_Task.fromJson(Map<String, dynamic> json) =>
-      _$_$_TaskFromJson(json);
+  factory _$_Task.fromJson(Map<String, dynamic> json) => _$$_TaskFromJson(json);
 
   @JsonKey(defaultValue: '')
   @override
@@ -127,20 +127,6 @@ class _$_Task extends _Task with DiagnosticableTreeMixin {
   @JsonKey(defaultValue: false)
   @override
   final bool complete;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Task(description: $description, complete: $complete)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'Task'))
-      ..add(DiagnosticsProperty('description', description))
-      ..add(DiagnosticsProperty('complete', complete));
-  }
 
   @override
   bool operator ==(dynamic other) {
@@ -167,7 +153,7 @@ class _$_Task extends _Task with DiagnosticableTreeMixin {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_TaskToJson(this);
+    return _$$_TaskToJson(this);
   }
 }
 
