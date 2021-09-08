@@ -24,7 +24,8 @@ class PlanController extends StateNotifier<List<Plan>> {
     }
     name = _checkForDuplicates(_plans.map((plan) => plan.name), name);
     //found duplicate or not update or not name
-    final plan = Plan()..name = name;
+    //final plan = Plan()..name = name;
+    final plan = Plan(name: name);
     _plans.add(plan);
   }
 
@@ -40,7 +41,8 @@ class PlanController extends StateNotifier<List<Plan>> {
     description = _checkForDuplicates(
         plan.tasks.map((task) => task.description), description);
 
-    final task = Task()..description = description;
+    //final task = Task()..description = description;
+    final task = Task(description: description);
     //can't use setter for final field but can add to the list
     plan.tasks.add(task);
     //List<Task> tasks = plan.tasks;

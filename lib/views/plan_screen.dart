@@ -91,14 +91,16 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
             //set the value in data model
             setState(() {
               print('selected: $selected, task: ${task.description}'); //t or f
-              task.complete = selected!;
+              //task.complete = selected!;
+              task = task.copyWith(complete: selected!);
             });
           }),
       title: TextFormField(
         initialValue: task.description,
         onFieldSubmitted: (text) {
           setState(() {
-            task.description = text;
+            //task.description = text;
+            task = task.copyWith(description: text);
           });
         },
       ),

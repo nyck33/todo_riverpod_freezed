@@ -27,6 +27,12 @@ dependencies:
   flutter_hooks: ^0.18.0
   hooks_riverpod: ^1.0.0-dev.7
   uuid:
+  http: 
+  json_annotation:
+  freezed:
+  freezed_annotation:
+  json_serializable:
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -36,6 +42,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  #freezed:
+  #json_serializable:
+  build_runner: 
 
   
 
