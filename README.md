@@ -1,6 +1,6 @@
 # master_plan
 
-### Flutter、Freezed、Riverpodにて作成中の「Todo]系アプリです。pubspec.yamlのバージョンの問題（バージョンが古すぎる）でToJsonのファンクションがcode-genされない状況でしたが、Github Issuesにてアドバイスをもらいましたので、バージョンを最新のにします。少々お待ちください。 Github Issueのリンク：https://github.com/google/json_serializable.dart/issues/973
+### 現時点でClass Plan内のList<Task>にTaskを追加する場面で迷ってます。Plan_Screen.dartのUIにてボタンプレスした時にPlanController.dartのファンクション　PlanController.createNewTask()を実行していますがエラーが発生します。思想としてはPlanController.createNewTaskがPlanControllerのメンバーのList<Plan>を新規のTaskを追加した新規のList<Plan>に更新することにより、「PlanController extends StateNotifier」ですが、PlanProvider.dartのProviderが更新に気づきまして、FlutterがUIを再構築する、でした。
 
 A new Flutter project.
 
