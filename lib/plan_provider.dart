@@ -13,7 +13,7 @@ import './controllers/plan_controller.dart';
 
 //second way using listen
 final plansProvider = StateNotifierProvider<PlanController, List<Plan>>(
-    (ref) => PlanController([]));
+    (ref) => PlanController());
 //assigned a function that returns plans?
 //can do something with plans in function body
 

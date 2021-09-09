@@ -7,13 +7,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/data_layer.dart';
-import 'package:flutter/material.dart';
 import '../plan_provider.dart';
 
 class PlanScreen extends ConsumerStatefulWidget {
   //final Plan plan; //referred to by widget.plan! later
   final Plan plan;
   final String planName;
+
   //instantiae PlanScreen with instance of Plan as member
   PlanScreen({Key? key, required this.plan, required this.planName})
       : super(key: key);
@@ -26,10 +26,14 @@ class PlanScreen extends ConsumerStatefulWidget {
 class _PlanScreenState extends ConsumerState<PlanScreen> {
   //get rid of keyboard on iOS by removing focus from textfield
   late ScrollController scrollController;
+  final textController = TextEditingController();
+
   //getter for plan, so widget refers to this object's instance
+  ///do these interfere with getter in Plan get PlanTasks?
+  ///or with the provider?
   Plan get plan => widget.plan;
-  List<Task> get tasks => widget.plan.tasks;
-  String get planName => widget.plan.name;
+  List<Task> get tasks => plan.planTasks;
+  String get planName => plan.planName;
 
   @override
   void initState() {
@@ -48,8 +52,8 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final planController = ref.watch(plansProvider.notifier);
-    final plans = ref.watch(plansProvider.notifier).plans;
+    //final planController = ref.watch(plansProvider.notifier);
+    //final plans = ref.watch(plansProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text("plan: $planName")),
@@ -64,44 +68,39 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
   }
 
   Widget _buildAddTaskButton() {
-    final plans = ref.watch(plansProvider.notifier).plans;
-    late final Plan thisPlan;
-    for (Plan p in plans) {
-      if (p.name == planName) {
-        thisPlan = p;
-      }
-    }
-    final thisTasks = thisPlan.tasks;
-    final planController = ref.watch(plansProvider.notifier);
+    //final planController = ref.watch(plansProvider.notifier);
 
     return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
           setState(() {
-            print('before plan.tasks: ${plan.tasks}');
-            planController.createNewTask(plan);
+            print('before tasks: $tasks');
+            ref.read(plansProvider.notifier).createNewTask(plan);
+            //planController.createNewTask(plan);
             //plan.tasks.add(Task());
 
-            print('after plan.tasks: ${plan.tasks}');
+            print('after tasks: $tasks');
           });
         });
   }
 
   Widget _buildTasksList() {
-    final plans = ref.watch(plansProvider.notifier).plans;
-    late final Plan thisPlan;
+    final plans = ref.watch(plansProvider);
+    late Plan thisPlan = Plan();
     for (Plan p in plans) {
-      if (p.name == planName) {
+      if (p.planName == planName) {
         thisPlan = p;
+        break;
       }
     }
 
     return ListView.builder(
         controller: scrollController,
-        itemCount: thisPlan.tasks.length,
+        itemCount: thisPlan.planTasks.length,
+        //itemCount: tasks.length,
         //param context not needed?
         itemBuilder: (_, index) => _buildTaskTile(
-              thisPlan.tasks[index],
+              thisPlan.planTasks[index],
             ));
   }
 
@@ -111,6 +110,8 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
       leading: Checkbox(
           //read boolean value in data model
           value: task.complete,
+
+          ///calls the getter like this?
           //(va) returned from widget view
           onChanged: (selected) {
             newTask = Task(description: task.description, complete: selected!);
@@ -122,6 +123,8 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
           }),
       title: TextFormField(
         initialValue: task.description,
+
+        ///calls getter like this?
         onFieldSubmitted: (text) {
           newTask = Task(description: text, complete: task.complete);
           setState(() {
@@ -133,5 +136,11 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
   }
 }

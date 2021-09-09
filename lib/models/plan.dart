@@ -1,8 +1,6 @@
 //holds all tasks
 import 'package:freezed_annotation/freezed_annotation.dart';
-//import 'package:json_serializable/builder.dart';
-//import 'package:json_serializable/json_serializable.dart';
-//import 'package:json_annotation/json_annotation.dart';
+
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
@@ -20,7 +18,7 @@ class Plan with _$Plan {
 
   factory Plan.fromJson(Map<String, dynamic> json) => _$PlanFromJson(json);
   //Map<String, dynamic> toJson() => _$PlanToJson(this);
-
+  /*
   List<dynamic> myToJson(Plan plan) {
     final String name = plan.name;
     final List<Task>? tasks = plan.tasks;
@@ -39,8 +37,9 @@ class Plan with _$Plan {
     }
     return taskJsonList;
   }
-
+  */
   List<Task> get planTasks => tasks;
+
   String get planName => name;
   int get completeCount => tasks.where((task) => task.complete).length;
   String get completenessMessage =>
