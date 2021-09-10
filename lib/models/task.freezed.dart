@@ -21,7 +21,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
 class _$TaskTearOff {
   const _$TaskTearOff();
 
-  _Task call({String description = '', bool complete = false}) {
+  _Task call({String? description = '', bool? complete = false}) {
     return _Task(
       description: description,
       complete: complete,
@@ -38,8 +38,8 @@ const $Task = _$TaskTearOff();
 
 /// @nodoc
 mixin _$Task {
-  String get description => throw _privateConstructorUsedError;
-  bool get complete => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
+  bool? get complete => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,7 +50,7 @@ mixin _$Task {
 abstract class $TaskCopyWith<$Res> {
   factory $TaskCopyWith(Task value, $Res Function(Task) then) =
       _$TaskCopyWithImpl<$Res>;
-  $Res call({String description, bool complete});
+  $Res call({String? description, bool? complete});
 }
 
 /// @nodoc
@@ -70,11 +70,11 @@ class _$TaskCopyWithImpl<$Res> implements $TaskCopyWith<$Res> {
       description: description == freezed
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       complete: complete == freezed
           ? _value.complete
           : complete // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
     ));
   }
 }
@@ -84,7 +84,7 @@ abstract class _$TaskCopyWith<$Res> implements $TaskCopyWith<$Res> {
   factory _$TaskCopyWith(_Task value, $Res Function(_Task) then) =
       __$TaskCopyWithImpl<$Res>;
   @override
-  $Res call({String description, bool complete});
+  $Res call({String? description, bool? complete});
 }
 
 /// @nodoc
@@ -105,11 +105,11 @@ class __$TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res>
       description: description == freezed
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       complete: complete == freezed
           ? _value.complete
           : complete // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
     ));
   }
 }
@@ -117,16 +117,16 @@ class __$TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Task extends _Task {
-  const _$_Task({this.description = '', this.complete = false}) : super._();
+  _$_Task({this.description = '', this.complete = false}) : super._();
 
   factory _$_Task.fromJson(Map<String, dynamic> json) => _$$_TaskFromJson(json);
 
   @JsonKey(defaultValue: '')
   @override
-  final String description;
+  final String? description;
   @JsonKey(defaultValue: false)
   @override
-  final bool complete;
+  final bool? complete;
 
   @override
   bool operator ==(dynamic other) {
@@ -158,15 +158,15 @@ class _$_Task extends _Task {
 }
 
 abstract class _Task extends Task {
-  const factory _Task({String description, bool complete}) = _$_Task;
-  const _Task._() : super._();
+  factory _Task({String? description, bool? complete}) = _$_Task;
+  _Task._() : super._();
 
   factory _Task.fromJson(Map<String, dynamic> json) = _$_Task.fromJson;
 
   @override
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   @override
-  bool get complete => throw _privateConstructorUsedError;
+  bool? get complete => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$TaskCopyWith<_Task> get copyWith => throw _privateConstructorUsedError;

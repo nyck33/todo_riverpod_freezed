@@ -1,10 +1,14 @@
 ///inherited widget includes Theme, Scaffold and many others
 ///.of(context) methods available
 ///inherited are immutable for lifecycle of app
+///
+///final updatedPlans = ref.watch(plansProvider.notifier).plans;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/foundation.dart';
+import 'package:master_plan/controllers/plan_controller.dart';
 
 import '../models/data_layer.dart';
 import '../plan_provider.dart';
@@ -32,8 +36,8 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
   ///do these interfere with getter in Plan get PlanTasks?
   ///or with the provider?
   Plan get plan => widget.plan;
-  List<Task> get tasks => plan.planTasks;
-  String get planName => plan.planName;
+  List<Task> get tasks => widget.plan.tasks!;
+  String get planName => widget.plan.name!;
 
   @override
   void initState() {
@@ -52,15 +56,15 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final planController = ref.watch(plansProvider.notifier);
-    //final plans = ref.watch(plansProvider);
+    final planController = ref.watch(plansProvider.notifier);
+    final plans = ref.watch(plansProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text("plan: $planName")),
       body: Column(
         children: [
           Expanded(child: _buildTasksList()),
-          SafeArea(child: Text(plan.completenessMessage))
+          SafeArea(child: Text(plan.completenessMessage!))
         ],
       ),
       floatingActionButton: _buildAddTaskButton(),
@@ -68,15 +72,15 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
   }
 
   Widget _buildAddTaskButton() {
-    //final planController = ref.watch(plansProvider.notifier);
+    final planController = ref.watch(plansProvider.notifier);
 
     return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
           setState(() {
             print('before tasks: $tasks');
-            ref.read(plansProvider.notifier).createNewTask(plan);
-            //planController.createNewTask(plan);
+            //ref.read(plansProvider.notifier).createNewTask(plan);
+            planController.createNewTask(plan);
             //plan.tasks.add(Task());
 
             print('after tasks: $tasks');
@@ -85,26 +89,35 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
   }
 
   Widget _buildTasksList() {
+    print('in buildTaskList');
     final plans = ref.watch(plansProvider);
-    late Plan thisPlan = Plan();
+    print('plans: $plans');
+    Plan? thisPlan;
     for (Plan p in plans) {
-      if (p.planName == planName) {
-        thisPlan = p;
+      if ((p.name!) == planName) {
+        thisPlan = p.copyWith(name: p.name!, tasks: p.tasks!);
+        //thisPlan = p;
         break;
       }
     }
+    if (thisPlan == null) {
+      thisPlan = Plan();
+    }
+    final List<Task> updatedTasks = thisPlan.tasks!;
 
     return ListView.builder(
         controller: scrollController,
-        itemCount: thisPlan.planTasks.length,
+        itemCount: updatedTasks.length,
         //itemCount: tasks.length,
         //param context not needed?
         itemBuilder: (_, index) => _buildTaskTile(
-              thisPlan.planTasks[index],
+              updatedTasks[index],
             ));
   }
 
   Widget _buildTaskTile(Task task) {
+    final planController = ref.watch(plansProvider.notifier);
+    print('in buidlTaskTile');
     late Task newTask;
     return ListTile(
       leading: Checkbox(
@@ -114,23 +127,32 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
           ///calls the getter like this?
           //(va) returned from widget view
           onChanged: (selected) {
-            newTask = Task(description: task.description, complete: selected!);
+            //newTask = Task(description: task.description, complete: selected!)
+            newTask = task.copyWith(
+                description: task.description!, complete: selected!);
             setState(() {
-              print('selected: $selected, task: ${task.description}'); //t or f
-              task = newTask;
+              print('selected: $selected, task: ${task.description!}'); //t or f
+              //task = newTask;
+              //task.complete = selected!;
+              //ref.read(plansProvider.notifier).updateTask(plan, task, newTask);
+              planController.updateTask(plan, task, newTask);
               print('checkbox task: $task');
             });
           }),
       title: TextFormField(
-        initialValue: task.description,
+        initialValue: task.description!,
 
         ///calls getter like this?
         onFieldSubmitted: (text) {
-          newTask = Task(description: text, complete: task.complete);
+          //newTask = Task(description: text, complete: task.complete);
+          newTask = task.copyWith(description: text, complete: task.complete!);
           setState(() {
             //task.description = text;
             //task = task.copyWith(description: text);
-            task = newTask;
+            //task = newTask;
+            //ref.read(plansProvider.notifier).updateTask(plan, task, newTask);
+            planController.updateTask(plan, task, newTask);
+
             print('task.description: $task');
           });
         },

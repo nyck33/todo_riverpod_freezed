@@ -1,18 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter/foundation.dart';
 
 import '../plan_provider.dart';
 import '../models/data_layer.dart';
-import '../controllers/plan_controller.dart';
-import '../models/data_layer.dart';
+//import 'tasks_controller.dart';
 
 class PlanController extends StateNotifier<List<Plan>> {
   List<Plan> _plans = [];
-
   PlanController() : super([]);
 
   //This public getter cannot be modified by any other object
@@ -23,7 +17,7 @@ class PlanController extends StateNotifier<List<Plan>> {
     if (name.isEmpty) {
       return;
     }
-    name = _checkForDuplicates(_plans.map((plan) => plan.planName), name);
+    name = _checkForDuplicates(_plans.map((plan) => plan.name!), name);
 
     List<Plan> newPlanList = [..._plans, Plan(name: name)];
     _plans = newPlanList;
@@ -34,68 +28,66 @@ class PlanController extends StateNotifier<List<Plan>> {
     //_plans.remove(plan);
     List<Plan> newPlanList = [
       for (Plan p in _plans)
-        if (p.planName != plan.planName) p
+        if (p.name != plan.name) p
     ];
     _plans = newPlanList;
   }
 
   void createNewTask(Plan plan, [String? description]) {
+    //adds a new empty task to task list of plan
+    print('in createNewTask');
     if (description == null || description.isEmpty) {
       description = 'New Task';
     }
 
     description = _checkForDuplicates(
-        plan.tasks.map((task) => task.description), description);
+        plan.tasks!.map((task) => task.description!), description);
 
     bool complete = false;
     final Task newTask = Task(description: description, complete: complete);
-    List<Task> newTasksList = [...plan.planTasks, newTask];
+
+    List<Task> newTasksList = [...plan.tasks!, newTask];
 
     _plans = [
       for (Plan p in _plans)
-        if (p.planName == plan.planName)
-          p.copyWith(name: plan.planName, tasks: newTasksList)
+        if (p.name! == plan.name!)
+          p.copyWith(name: plan.name!, tasks: newTasksList)
         else
           p
     ];
+  }
 
-    //final updatedPlan = plan.copyWith(name: plan.planName, tasks: newTasksList);
-    //plan.planTasks;
+  void updateTask(Plan plan, Task oldTask, Task updatedTask) {
+    //params: plan is target, oldTask is target
+    //find the old task with description and replace with new task
+    print('in updateTask');
+    //List<Task> newTasksList = [...plan.tasks, updatedTask];
 
-    //final Task newTask = Task(description: description, complete: complete);
-    //List<Task> newTaskList = [...plan.tasks, newTask];
-    //final Plan newPlan = Plan(name: plan.planName, tasks: newTaskList);
+    List<Plan> newPlans = [];
+    List<Task> newTasks = [];
 
-    //replace plan with new plan with newTaskList
-    /*_plans = [
-      for (Plan p in _plans)
-        {
-          print('createNewTask p.runtimeType: ${p.runtimeType}'),
-          if (p.planName == plan.planName)
-            {
-              //newPlan.copyWith(name: plan.planName, tasks: newTaskList)
-              newPlan
-            }
-          else
-            p
+    for (Plan p in _plans) {
+      if (p.name! == plan.name!) {
+        for (Task t in p.tasks!) {
+          if (t.description! == oldTask.description!) {
+            newTasks.add(updatedTask);
+          } else {
+            newTasks.add(t);
+          }
         }
-    ];*/
-    /*
-    _plans = [
-      for (var i = 0; i < _plans.length; i++)
-        {
-          if (_plans[i].planName == plan.planName)
-            {_plans[i].copyWith(name: plan.planName, tasks: newTaskList)}
-          else
-            {_plans[i]}
-        }
-    ];*/
+        final newPlan = plan.copyWith(name: plan.name, tasks: newTasks);
+        newPlans.add(newPlan);
+      } else {
+        newPlans.add(p);
+      }
+    }
+    _plans = newPlans;
   }
 
   ///unused
   void deleteTask(Plan plan, Task task) => [
-        for (var t in plan.tasks)
-          if (t.description != task.description) t
+        for (var t in plan.tasks!)
+          if (t.description! != task.description!) t
       ];
 
   //passed iterable which is a func that maps list plans to their names

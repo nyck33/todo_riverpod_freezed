@@ -44,7 +44,7 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
         children: <Widget>[
           _buildTaskCreator(), //textfield and func to add plan on tap
           Expanded(child: _buildPlanTasks()),
-          SafeArea(child: Text(plan.completenessMessage)),
+          SafeArea(child: Text(plan.completenessMessage!)),
         ],
       ),
       //floatingActionButton: _buildAddTaskButton,
@@ -101,6 +101,7 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
 
     //unmodifiable list
     final updatedPlans = ref.watch(plansProvider.notifier).plans;
+    final planController = ref.watch(plansProvider.notifier);
 
     if (updatedPlans.isEmpty) {
       return Column(
@@ -114,8 +115,8 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
 
     List<Task> updatedTasks = [];
     for (Plan p in updatedPlans) {
-      if (p.planName == thisName) {
-        updatedTasks = p.planTasks;
+      if (p.name == thisName) {
+        updatedTasks = p.tasks!;
         break;
       }
     }
@@ -130,11 +131,12 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
               onChanged: (selected) {
                 setState(() {
                   final Task compTask = task.copyWith(
-                      description: task.description, complete: selected!);
-                  task = compTask;
+                      description: task.description, complete: selected);
+                  //task = compTask;
+                  planController.updateTask(plan, task, compTask);
                 });
               }),
-          title: Text(task.description),
+          title: Text(task.description!),
           //subtitle: Text(plan.completenessMessage),
         );
       },

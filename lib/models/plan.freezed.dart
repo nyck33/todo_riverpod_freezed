@@ -21,7 +21,7 @@ Plan _$PlanFromJson(Map<String, dynamic> json) {
 class _$PlanTearOff {
   const _$PlanTearOff();
 
-  _Plan call({String name = '', List<Task> tasks = const []}) {
+  _Plan call({String? name = '', List<Task>? tasks = const []}) {
     return _Plan(
       name: name,
       tasks: tasks,
@@ -38,8 +38,8 @@ const $Plan = _$PlanTearOff();
 
 /// @nodoc
 mixin _$Plan {
-  String get name => throw _privateConstructorUsedError;
-  List<Task> get tasks => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  List<Task>? get tasks => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,7 +50,7 @@ mixin _$Plan {
 abstract class $PlanCopyWith<$Res> {
   factory $PlanCopyWith(Plan value, $Res Function(Plan) then) =
       _$PlanCopyWithImpl<$Res>;
-  $Res call({String name, List<Task> tasks});
+  $Res call({String? name, List<Task>? tasks});
 }
 
 /// @nodoc
@@ -70,11 +70,11 @@ class _$PlanCopyWithImpl<$Res> implements $PlanCopyWith<$Res> {
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       tasks: tasks == freezed
           ? _value.tasks
           : tasks // ignore: cast_nullable_to_non_nullable
-              as List<Task>,
+              as List<Task>?,
     ));
   }
 }
@@ -84,7 +84,7 @@ abstract class _$PlanCopyWith<$Res> implements $PlanCopyWith<$Res> {
   factory _$PlanCopyWith(_Plan value, $Res Function(_Plan) then) =
       __$PlanCopyWithImpl<$Res>;
   @override
-  $Res call({String name, List<Task> tasks});
+  $Res call({String? name, List<Task>? tasks});
 }
 
 /// @nodoc
@@ -105,11 +105,11 @@ class __$PlanCopyWithImpl<$Res> extends _$PlanCopyWithImpl<$Res>
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       tasks: tasks == freezed
           ? _value.tasks
           : tasks // ignore: cast_nullable_to_non_nullable
-              as List<Task>,
+              as List<Task>?,
     ));
   }
 }
@@ -117,16 +117,16 @@ class __$PlanCopyWithImpl<$Res> extends _$PlanCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Plan extends _Plan with DiagnosticableTreeMixin {
-  const _$_Plan({this.name = '', this.tasks = const []}) : super._();
+  _$_Plan({this.name = '', this.tasks = const []}) : super._();
 
   factory _$_Plan.fromJson(Map<String, dynamic> json) => _$$_PlanFromJson(json);
 
   @JsonKey(defaultValue: '')
   @override
-  final String name;
+  final String? name;
   @JsonKey(defaultValue: const [])
   @override
-  final List<Task> tasks;
+  final List<Task>? tasks;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -170,15 +170,15 @@ class _$_Plan extends _Plan with DiagnosticableTreeMixin {
 }
 
 abstract class _Plan extends Plan {
-  const factory _Plan({String name, List<Task> tasks}) = _$_Plan;
-  const _Plan._() : super._();
+  factory _Plan({String? name, List<Task>? tasks}) = _$_Plan;
+  _Plan._() : super._();
 
   factory _Plan.fromJson(Map<String, dynamic> json) = _$_Plan.fromJson;
 
   @override
-  String get name => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
   @override
-  List<Task> get tasks => throw _privateConstructorUsedError;
+  List<Task>? get tasks => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PlanCopyWith<_Plan> get copyWith => throw _privateConstructorUsedError;

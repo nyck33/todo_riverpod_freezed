@@ -1,19 +1,24 @@
 ///Change to Riverpod
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter/foundation.dart';
 
 import './models/data_layer.dart';
 import './controllers/plan_controller.dart';
+import './controllers/tasks_controller.dart';
 
 //first way
 //final plansProvider = StateNotifierProvider((ref) => PlanController());
 
-//second way using listen
+//put one in each PlanController
+final tasksNotifierProvider =
+    StateNotifierProvider<TasksController, List<Task>>(
+        (ref) => TasksController());
+
 final plansProvider = StateNotifierProvider<PlanController, List<Plan>>(
     (ref) => PlanController());
+//second way using listen
+
 //assigned a function that returns plans?
 //can do something with plans in function body
 

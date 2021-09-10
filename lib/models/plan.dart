@@ -1,20 +1,22 @@
 //holds all tasks
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'dart:convert';
-
 import './task.dart';
+import '../controllers/tasks_controller.dart';
 
 part 'plan.g.dart';
 part 'plan.freezed.dart';
 
 @freezed
 class Plan with _$Plan {
-  const Plan._();
+  //TasksController tasksController = TasksController();
 
-  const factory Plan(
-      {@Default('') String name, @Default([]) List<Task> tasks}) = _Plan;
+  Plan._();
+
+  factory Plan({@Default('') String? name, @Default([]) List<Task>? tasks}) =
+      _Plan;
 
   factory Plan.fromJson(Map<String, dynamic> json) => _$PlanFromJson(json);
   //Map<String, dynamic> toJson() => _$PlanToJson(this);
@@ -38,13 +40,14 @@ class Plan with _$Plan {
     return taskJsonList;
   }
   */
-  List<Task> get planTasks => tasks;
+  List<Task>? get tasks => this.tasks;
 
-  String get planName => name;
-  int get completeCount => tasks.where((task) => task.complete).length;
-  String get completenessMessage =>
+  String? get name => this.name;
+  int? get completeCount =>
+      this.tasks!.where((task) => (task.complete! == true)).length;
+  String? get completenessMessage =>
       //tasks == null ? 'null' : '$completeCount ouf of ${tasks!.length} tasks';
-      '$completeCount ouf of ${tasks.length} tasks';
+      '$completeCount ouf of ${this.tasks!.length} tasks';
 }
 
 /*

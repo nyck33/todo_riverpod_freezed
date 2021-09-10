@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 
 import '../models/data_layer.dart';
 import '../plan_provider.dart';
-import 'plan_screen2.dart';
+import './plan_screen2.dart';
 
 class PlanCreatorScreen extends ConsumerStatefulWidget {
   const PlanCreatorScreen({Key? key}) : super(key: key);
@@ -108,14 +108,14 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
         itemBuilder: (context, index) {
           final plan = plans[index];
           return ListTile(
-              title: Text(plan.planName),
-              subtitle: Text(plan.completenessMessage),
+              title: Text(plan.name!),
+              subtitle: Text(plan.completenessMessage!),
               onTap: () {
                 //go  to plan_screen for this plan
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => PlanScreen(
                           plan: plan,
-                          planName: plan.planName,
+                          planName: plan.name!,
                         )));
               });
         });
