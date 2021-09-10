@@ -8,8 +8,9 @@ import '../repositories/fastapi_repo.dart';
 //import 'tasks_controller.dart';
 
 class PlanController extends StateNotifier<List<Plan>> {
-  List<Plan> _plans = [];
-  PlanController() : super([]);
+  PlanController([List<Plan>? initialPlans]) : super(initialPlans ?? []);
+
+  //List<Plan> state = [];
 
   //plans to save to backend, can send them one by one
   List<Map<String, dynamic>> planMaps = [];
@@ -19,26 +20,26 @@ class PlanController extends StateNotifier<List<Plan>> {
 
   //This public getter cannot be modified by any other object
   //immutable list of plans
-  List<Plan> get plans => List.unmodifiable(_plans);
-  //List<Plan> get plans => _plans;
+  List<Plan> get plans => List.unmodifiable(state);
+  //List<Plan> get plans => state;
   void addNewPlan(String name) {
     if (name.isEmpty) {
       return;
     }
-    name = _checkForDuplicates(_plans.map((plan) => plan.name!), name);
+    name = _checkForDuplicates(state.map((plan) => plan.name!), name);
 
-    List<Plan> newPlanList = [..._plans, Plan(name: name)];
-    _plans = newPlanList;
+    List<Plan> newPlanList = [...state, Plan(name: name)];
+    state = newPlanList;
   }
 
   ///unused
   void deletePlan(Plan plan) {
-    //_plans.remove(plan);
+    //state.remove(plan);
     List<Plan> newPlanList = [
-      for (Plan p in _plans)
+      for (Plan p in state)
         if (p.name != plan.name) p
     ];
-    _plans = newPlanList;
+    state = newPlanList;
   }
 
   void createNewTask(Plan plan, [String? description]) {
@@ -54,12 +55,12 @@ class PlanController extends StateNotifier<List<Plan>> {
     bool complete = false;
     final Task newTask = Task(description: description, complete: complete);
 
-    List<Task> newTasksList = [...plan.tasks!, newTask];
+    //List<Task> newTasksList = [...plan.tasks!, newTask];
 
-    _plans = [
-      for (Plan p in _plans)
+    state = [
+      for (Plan p in state)
         if (p.name! == plan.name!)
-          p.copyWith(name: plan.name!, tasks: newTasksList)
+          p.copyWith(name: plan.name!, tasks: [...p.tasks!, newTask])
         else
           p
     ];
@@ -74,7 +75,7 @@ class PlanController extends StateNotifier<List<Plan>> {
     List<Plan> newPlans = [];
     List<Task> newTasks = [];
 
-    for (Plan p in _plans) {
+    for (Plan p in state) {
       if (p.name! == plan.name!) {
         for (Task t in p.tasks!) {
           if (t.description! == oldTask.description!) {
@@ -89,7 +90,7 @@ class PlanController extends StateNotifier<List<Plan>> {
         newPlans.add(p);
       }
     }
-    _plans = newPlans;
+    state = newPlans;
   }
 
   ///unused

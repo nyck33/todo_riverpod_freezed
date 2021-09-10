@@ -24,7 +24,7 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
   @override
   Widget build(BuildContext context) {
     //this gives me the List<Plan>
-    final List<Plan> plans = ref.watch(plansProvider);
+    final plans = ref.watch(plansProvider.notifier).state;
     //_plans = ref.watch(plansProvider);
     print('plancreator build plans length: ${plans.length}');
     //final plans = ref.watch(plansProvider);
@@ -70,11 +70,11 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
     //planController.addNewPlan(text);
 
     //method 2 with watch
-    final planController = ref.watch(plansProvider.notifier);
+    //final planController = ref.watch(plansProvider.notifier);
 
-    planController.addNewPlan(text);
-    //instance of PlanController
-    print('plancreator addPlan: $planController');
+    //planController.addNewPlan(text);
+    ref.read(plansProvider.notifier).addNewPlan(text);
+
     //method 3 with listen is wrong but something like this,
     //ref is passed since this is a method in ConsumerState
     //ref.listen<List<Plan>>(plansProvider, (List<Plan> plans) {

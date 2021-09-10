@@ -24,14 +24,14 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
 
   //for creating simple Textfields for new plans
   final textController = TextEditingController();
-  Plan get plan => widget.plan;
+  Plan get thisPlan => widget.plan;
   //List<Task> get tasks => plan.planTasks;
   String get thisName => widget.planName;
 
   @override
   Widget build(BuildContext context) {
     //this gives me the List<Plan>
-    final List<Plan> plans = ref.watch(plansProvider);
+    final plans = ref.watch(plansProvider.notifier).state;
     //_plans = ref.watch(plansProvider);
     print('plancreator build plans length: ${plans.length}');
     //final plans = ref.watch(plansProvider);
@@ -44,7 +44,7 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
         children: <Widget>[
           _buildTaskCreator(), //textfield and func to add plan on tap
           Expanded(child: _buildPlanTasks()),
-          SafeArea(child: Text(plan.completenessMessage!)),
+          SafeArea(child: Text(thisPlan.completenessMessage!)),
         ],
       ),
       //floatingActionButton: _buildAddTaskButton,
@@ -79,15 +79,17 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
     //planController.addNewPlan(text);
 
     //method 2 with watch
-    final planController = ref.watch(plansProvider.notifier);
+    //final planController = ref.watch(plansProvider.notifier);
 
-    planController.createNewTask(plan, text);
+    //planController.createNewTask(plan, text);
+    ref.read(plansProvider.notifier).createNewTask(thisPlan, text);
+
     //instance of PlanController
     //method 3 with listen is wrong but something like this,
     //ref is passed since this is a method in ConsumerState
     //ref.listen<List<Plan>>(plansProvider, (List<Plan> plans) {
     //final plan = Plan()..name = text;
-    //plans = [...plans, plan];
+    //plans = [...plans, plan];F
 
     textController.clear();
     //request focus
@@ -100,8 +102,9 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
     //final plans = ref.read(plansProvider.notifier).plans;
 
     //unmodifiable list
-    final updatedPlans = ref.watch(plansProvider.notifier).plans;
-    final planController = ref.watch(plansProvider.notifier);
+    final updatedPlans = ref.read(plansProvider.notifier).state;
+    //final planController = ref.watch(plansProvider.notifier);
+    //final updatedPlans = ref.watch(plansProvider);
 
     if (updatedPlans.isEmpty) {
       return Column(
@@ -132,12 +135,12 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
                 setState(() {
                   final Task compTask = task.copyWith(
                       description: task.description, complete: selected);
-                  //task = compTask;
-                  planController.updateTask(plan, task, compTask);
+                  ref
+                      .read(plansProvider.notifier)
+                      .updateTask(thisPlan, task, compTask);
                 });
               }),
           title: Text(task.description!),
-          //subtitle: Text(plan.completenessMessage),
         );
       },
     );

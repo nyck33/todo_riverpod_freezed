@@ -16,7 +16,7 @@ final tasksNotifierProvider =
         (ref) => TasksController());
 
 final plansProvider = StateNotifierProvider<PlanController, List<Plan>>(
-    (ref) => PlanController());
+    (ref) => PlanController([]));
 //second way using listen
 
 //assigned a function that returns plans?
