@@ -92,59 +92,38 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
     //final plans = ref.read(plansProvider.notifier).plans;
 
     //unmodifiable list
-    final plans = ref.watch(plansProvider.notifier).plans;
+    final plans = ref.watch(plansProvider.notifier).state;
 
     if (plans.isEmpty) {
       return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.note, size: 100, color: Colors.grey),
-            Text('No plans yet', style: Theme.of(context).textTheme.headline5)
-          ]);
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(Icons.note, size: 100, color: Colors.grey),
+          Text('No plans yet', style: Theme.of(context).textTheme.headline5)
+        ],
+      );
     }
 
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ListView.builder(
-                    itemCount: plans.length,
-                    itemBuilder: (context, index) {
-                      final plan = plans[index];
-                      return ListTile(
-                          title: Text(plan.name!),
-                          subtitle: Text(plan.completenessMessage!),
-                          onTap: () {
-                            //go  to plan_screen for this plan
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => PlanScreen(
-                                      plan: plan,
-                                      planName: plan.name!,
-                                    )));
-                          });
-                    }),
+    return ListView.builder(
+      itemCount: plans.length,
+      itemBuilder: (context, index) {
+        final plan = plans[index];
+        return ListTile(
+          title: Text(plan.name!),
+          subtitle: Text(plan.completenessMessage!),
+          onTap: () {
+            //go  to plan_screen for this plan
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => PlanScreen(
+                  plan: plan,
+                  planName: plan.name!,
+                ),
               ),
-            ],
-          ),
-        ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                  //ref.read(plansProvider.notifier).apiClient.sendPlans()
-                },
-                child: Icon(Icons.save),
-              ),
-            ],
-          ),
-        ),
-      ],
+            );
+          },
+        );
+      },
     );
   }
 

@@ -39,11 +39,24 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
     //final plans = ref.read(plansProvider.notifier).plans;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Master Plans')),
+      appBar: AppBar(
+        title: Text(thisName),
+      ),
       body: Column(
         children: <Widget>[
-          _buildTaskCreator(), //textfield and func to add plan on tap
-          Expanded(child: _buildPlanTasks()),
+          _buildTaskCreator(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Go back'),
+              ),
+            ],
+          ), //textfield and func to add plan on tap
+          Expanded(
+            child: _buildPlanTasks(),
+          ),
           SafeArea(
             child: Text(
               ref.read(plansProvider.notifier).showNumTasksComplete(thisPlan),
