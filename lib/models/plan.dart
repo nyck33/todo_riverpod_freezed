@@ -9,7 +9,9 @@ import '../controllers/tasks_controller.dart';
 part 'plan.g.dart';
 part 'plan.freezed.dart';
 
-@freezed
+///nested Task class to Json
+///https://flutter.dev/docs/development/data-and-backend/json#manual-encoding
+@freezed //(explicitToJson: true)
 class Plan with _$Plan {
   //TasksController tasksController = TasksController();
 
@@ -20,26 +22,38 @@ class Plan with _$Plan {
 
   factory Plan.fromJson(Map<String, dynamic> json) => _$PlanFromJson(json);
   //Map<String, dynamic> toJson() => _$PlanToJson(this);
-  /*
-  List<dynamic> myToJson(Plan plan) {
-    final String name = plan.name;
+
+  //param Plan should be this when called
+  Map<String, dynamic> myToJson(Plan plan) {
+    //todo: need to have top level dict with plan.name{} for multiple plans
+    //or put button on plan_screen
+    //returns a json-like list of dicts
+    final String? name = plan.name;
     final List<Task>? tasks = plan.tasks;
+
     final Map<String, dynamic> json = {"plan_name": name, "tasks": []};
 
-    if (tasks == null) return [];
+    late List taskJsonList;
 
-    List taskJsonList = [];
-    for (Task task in tasks) {
-      final description = task.description;
-      final complete = task.complete;
-      var taskDict = {};
-      taskDict['description'] = description;
-      taskDict['complete'] = complete;
-      taskJsonList.add(taskDict);
+    if (tasks != null) {
+      taskJsonList = [];
+    } else {
+      taskJsonList = [];
+      for (Task task in tasks!) {
+        final description = task.description;
+        final complete = task.complete;
+        var taskDict = {};
+        taskDict['description'] = description;
+        taskDict['complete'] = complete;
+        taskJsonList.add(taskDict);
+      }
     }
-    return taskJsonList;
+
+    json[name]['tasks'] = taskJsonList;
+
+    return json;
   }
-  */
+
   List<Task>? get tasks => this.tasks;
 
   String? get name => this.name;

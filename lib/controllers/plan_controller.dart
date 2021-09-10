@@ -3,11 +3,19 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../plan_provider.dart';
 import '../models/data_layer.dart';
+import '../repositories/fastapi_repo.dart';
+
 //import 'tasks_controller.dart';
 
 class PlanController extends StateNotifier<List<Plan>> {
   List<Plan> _plans = [];
   PlanController() : super([]);
+
+  //plans to save to backend, can send them one by one
+  List<Map<String, dynamic>> planMaps = [];
+
+  //the repo
+  FastApiClient apiClient = FastApiClient();
 
   //This public getter cannot be modified by any other object
   //immutable list of plans
