@@ -103,22 +103,49 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
           ]);
     }
 
-    return ListView.builder(
-        itemCount: plans.length,
-        itemBuilder: (context, index) {
-          final plan = plans[index];
-          return ListTile(
-              title: Text(plan.name!),
-              subtitle: Text(plan.completenessMessage!),
-              onTap: () {
-                //go  to plan_screen for this plan
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => PlanScreen(
-                          plan: plan,
-                          planName: plan.name!,
-                        )));
-              });
-        });
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverToBoxAdapter(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ListView.builder(
+                    itemCount: plans.length,
+                    itemBuilder: (context, index) {
+                      final plan = plans[index];
+                      return ListTile(
+                          title: Text(plan.name!),
+                          subtitle: Text(plan.completenessMessage!),
+                          onTap: () {
+                            //go  to plan_screen for this plan
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => PlanScreen(
+                                      plan: plan,
+                                      planName: plan.name!,
+                                    )));
+                          });
+                    }),
+              ),
+            ],
+          ),
+        ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  //ref.read(plansProvider.notifier).apiClient.sendPlans()
+                },
+                child: Icon(Icons.save),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   @override
