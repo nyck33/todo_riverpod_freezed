@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../plan_provider.dart';
 import '../models/data_layer.dart';
 import '../repositories/fastapi_repo.dart';
 
@@ -84,13 +83,15 @@ class PlanController extends StateNotifier<List<Plan>> {
             newTasks.add(t);
           }
         }
-        final newPlan = plan.copyWith(name: plan.name, tasks: newTasks);
-        newPlans.add(newPlan);
-      } else {
-        newPlans.add(p);
       }
     }
-    state = newPlans;
+    state = [
+      for (Plan p in state)
+        if (p.name! == plan.name!)
+          p.copyWith(name: plan.name!, tasks: newTasks)
+        else
+          p
+    ];
   }
 
   ///unused
@@ -98,6 +99,20 @@ class PlanController extends StateNotifier<List<Plan>> {
         for (var t in plan.tasks!)
           if (t.description! != task.description!) t
       ];
+
+  String showNumTasksComplete(Plan plan) {
+    int completeCount = 0;
+    int numTasks = 0;
+    for (Plan p in state) {
+      if (p.name! == plan.name!) {
+        completeCount =
+            p.tasks!.where((task) => (task.complete! == true)).length;
+        numTasks = p.tasks!.length;
+      }
+    }
+
+    return '$completeCount ouf of $numTasks tasks';
+  }
 
   //passed iterable which is a func that maps list plans to their names
   static String _checkForDuplicates(Iterable<String> items, String text) {

@@ -44,7 +44,11 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
         children: <Widget>[
           _buildTaskCreator(), //textfield and func to add plan on tap
           Expanded(child: _buildPlanTasks()),
-          SafeArea(child: Text(thisPlan.completenessMessage!)),
+          SafeArea(
+            child: Text(
+              ref.read(plansProvider.notifier).showNumTasksComplete(thisPlan),
+            ),
+          ),
         ],
       ),
       //floatingActionButton: _buildAddTaskButton,
