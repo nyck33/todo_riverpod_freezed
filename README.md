@@ -1,6 +1,17 @@
 # master_plan
 
-### 現時点でClass Plan内のList<Task>にTaskを追加する場面で迷ってます。Plan_Screen.dartのUIにてボタンプレスした時にPlanController.dartのファンクション　PlanController.createNewTask()を実行していますがエラーが発生します。思想としてはPlanController.createNewTaskがPlanControllerのメンバーのList<Plan>を新規のTaskを追加した新規のList<Plan>に更新することにより、「PlanController extends StateNotifier」ですが、PlanProvider.dartのProviderが更新に気づきまして、FlutterがUIを再構築する、でした。
+### シンプルですが、FreezedとRiverpodの機能を導入しまして、正常に実行でます。
+
+###残っている課題：
+１．SharedPreferences及びその他の方法にてデータをセーブする。
+２．FastAPIのバックエンドに連携しまして、データを長期的にセーブする。
+３．バックエンドからデータを読む。
+
+###希望の課題
+１．カレンダー機能
+２．削除機能
+３．ログイン機能
+
 
 A new Flutter project.
 
