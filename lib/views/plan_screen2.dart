@@ -50,7 +50,7 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
             children: [
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Go back'),
+                child: const Text('Go Back'),
               ),
             ],
           ), //textfield and func to add plan on tap

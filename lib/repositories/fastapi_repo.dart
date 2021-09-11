@@ -9,24 +9,57 @@ import '../models/plan.dart';
 
 class FastApiClient {
   ///need port number
-  final String? defaultUri;
+  final String defaultUri = 'todo-fastapi-flutter.herokuapp.com';
+  final String path = 'plan/';
   //final String defaultUri = 'http://localhost:8000';
+  //inet 172.18.0.1/16
 
-  FastApiClient({@Default('http://localhost:8000') this.defaultUri});
+  //String get defaultUri => defaultUri;
+
+  //FastApiClient({@Default('http://localhost:8000') defaultUri});
+  FastApiClient();
   //Future<http.Response> sendPlan(Map<String,dynamic planMap) async{
-  Future<http.Response> sendPlan(Plan plan) async {
+  /*
+  Future<http.Response?> sendPlan(Plan plan) async {
     final String json = jsonEncode(plan);
-
-    return await http.post(Uri.parse(defaultUri!),
-        headers: <String, String>{
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-        body: json);
+    Uri url = Uri.https(defaultUri, path);
+    print('uri: ${url.toString()}');
+    try {
+      http.Response response =
+          await http.post(url, //Uri.parse(this.defaultUri),
+              headers: <String, String>{
+                'Content-Type': 'application/json',
+              },
+              body: json);
+      print('response body: ${response.body}, status: ${response.statusCode}');
+      return response;
+    } catch (err) {
+      print('FastApiClient error sendPlan: $err');
+      return null;
+    }
+  }
+  */
+  Future<http.Response?> sendPlan(Plan plan) async {
+    final String json = jsonEncode(plan);
+    http.Response? response;
+    Uri url = Uri.parse('https://todo-fastapi-flutter.herokuapp.com/plan/');
+    try {
+      response = await http.post(url, //Uri.parse(this.defaultUri),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: json);
+      print('response body: ${response.body}, status: ${response.statusCode}');
+      return response;
+    } catch (err) {
+      print('FastApiClient error sendPlan: $err');
+      return null;
+    }
   }
 
   Future<List<Plan>?> getPlans() async {
     final List<Plan> planList;
-    Uri url = Uri.parse(defaultUri!);
+    Uri url = Uri.parse(defaultUri);
     http.Response response = await http.get(url);
     if (response.statusCode == HttpStatus.ok) {
       planList = jsonDecode(response.body);

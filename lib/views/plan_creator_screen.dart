@@ -36,6 +36,17 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
       body: Column(
         children: <Widget>[
           _buildPlanCreator(), //textfield and func to add plan on tap
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ElevatedButton(
+              onPressed: () {
+                ref
+                    .read(plansProvider.notifier)
+                    .savePlans(ref.read(plansProvider.notifier).state);
+              },
+              child: const Text('Save Plans'),
+            ),
+          ),
           Expanded(child: _buildMasterPlans()),
         ],
       ),

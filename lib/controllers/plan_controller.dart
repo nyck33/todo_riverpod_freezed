@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:master_plan/services/fastapi_service.dart';
 
 import '../models/data_layer.dart';
 import '../repositories/fastapi_repo.dart';
@@ -14,8 +15,9 @@ class PlanController extends StateNotifier<List<Plan>> {
   //plans to save to backend, can send them one by one
   List<Map<String, dynamic>> planMaps = [];
 
-  //the repo
+  //the service to divide each plan
   FastApiClient apiClient = FastApiClient();
+  FastApiService fastApiService = FastApiService();
 
   //This public getter cannot be modified by any other object
   //immutable list of plans
@@ -39,6 +41,10 @@ class PlanController extends StateNotifier<List<Plan>> {
         if (p.name != plan.name) p
     ];
     state = newPlanList;
+  }
+
+  void savePlans(List<Plan> plans) {
+    fastApiService.dividePlans(plans);
   }
 
   void createNewTask(Plan plan, [String? description]) {

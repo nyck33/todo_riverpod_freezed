@@ -14,18 +14,29 @@ class FastApiService {
   List<Plan>? _plansList = [];
   List<http.Response> _responseList = [];
 
-  FastApiService(this._plansList);
+  FastApiService();
 
   //calls savePlan on each iteration
   Future<void> dividePlans(List<Plan> plans) async {
-    http.Response response;
+    http.Response? response;
     for (Plan p in plans) {
-      response = await fastApiClient.sendPlan(p);
-      _responseList.add(response);
+      //try catch finally
+      try {
+        response = await fastApiClient.sendPlan(p);
+        //seems wrong could be null
+        _responseList.add(response!);
+      } catch (err) {
+        print('Error FastApiService sendPlan: $err');
+      }
     }
   }
 
   Future<void> getPlans() async {
-    _plansList = await fastApiClient.getPlans();
+    //need try, catch, finally block
+    try {
+      _plansList = await fastApiClient.getPlans();
+    } catch (err) {
+      print('Error FastApiService getPlans: $err');
+    }
   }
 }

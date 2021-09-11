@@ -31,7 +31,7 @@ class Plan with _$Plan {
     final String? name = plan.name;
     final List<Task>? tasks = plan.tasks;
 
-    final Map<String, dynamic> json = {"plan_name": name, "tasks": []};
+    final Map<String, dynamic> json = {"name": name, "tasks": []};
 
     late List taskJsonList;
 
