@@ -29,6 +29,19 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
   String get thisName => widget.planName;
 
   @override
+  void initState() {
+    super.initState();
+    //setState(() {
+
+    //});
+    _loadPlans();
+  }
+
+  void _loadPlans() {
+    ref.read(plansProvider.notifier).loadState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //this gives me the List<Plan>
     final plans = ref.watch(plansProvider.notifier).state;

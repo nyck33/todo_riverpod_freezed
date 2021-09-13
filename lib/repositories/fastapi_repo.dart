@@ -5,9 +5,10 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'dart:convert';
 
-import '../models/plan.dart';
+import '../models/data_layer.dart';
+import './abstract_repo.dart';
 
-class FastApiClient {
+class FastApiClient implements Repository {
   ///need port number
   final String defaultUri = 'todo-fastapi-flutter.herokuapp.com';
   final String path = 'plan/';
@@ -57,8 +58,8 @@ class FastApiClient {
     }
   }
 
-  Future<List<Plan>?> getPlans() async {
-    final List<Plan> planList;
+  Future<List<Map<String, dynamic>>?> getPlans([String? key]) async {
+    final List<Map<String, dynamic>> planList;
     Uri url = Uri.parse(defaultUri);
     http.Response response = await http.get(url);
     if (response.statusCode == HttpStatus.ok) {

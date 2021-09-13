@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:master_plan/services/fastapi_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:master_plan/services/fastapi_service.dart';
 import '../models/data_layer.dart';
 import '../repositories/fastapi_repo.dart';
+import '../repositories/shared_prefs_repo.dart';
 
 //import 'tasks_controller.dart';
 
@@ -19,10 +21,26 @@ class PlanController extends StateNotifier<List<Plan>> {
   FastApiClient apiClient = FastApiClient();
   FastApiService fastApiService = FastApiService();
 
+  //SharedPreferences
+  SharedPreferencesRepo sharedPreferencesRepo = SharedPreferencesRepo();
+
   //This public getter cannot be modified by any other object
   //immutable list of plans
   List<Plan> get plans => List.unmodifiable(state);
-  //List<Plan> get plans => state;
+
+  void loadState() async {
+    final plansJsons = await sharedPreferencesRepo.getPlans();
+    final List<Plan> plansList = [];
+    if (plansJsons != null) {
+      for (Map<String, dynamic> p in plansJsons) {
+        plansList.add(Plan.fromJson(p));
+      }
+    }
+    print(
+        'controller load: plansList.length: ${plansList.length}, plansList: $plansList');
+    state = plansList;
+  }
+
   void addNewPlan(String name) {
     if (name.isEmpty) {
       return;
@@ -31,6 +49,7 @@ class PlanController extends StateNotifier<List<Plan>> {
 
     List<Plan> newPlanList = [...state, Plan(name: name)];
     state = newPlanList;
+    savePlansLocal(state);
   }
 
   ///unused
@@ -41,10 +60,17 @@ class PlanController extends StateNotifier<List<Plan>> {
         if (p.name != plan.name) p
     ];
     state = newPlanList;
+
+    savePlansLocal(state);
   }
 
   void savePlans(List<Plan> plans) {
     fastApiService.dividePlans(plans);
+  }
+
+  Future<void> savePlansLocal(List<Plan> plans) async {
+    //can call it after each change to state
+    await sharedPreferencesRepo.sendPlans(state);
   }
 
   void createNewTask(Plan plan, [String? description]) {
@@ -69,9 +95,10 @@ class PlanController extends StateNotifier<List<Plan>> {
         else
           p
     ];
+    savePlansLocal(state);
   }
 
-  void updateTask(Plan plan, Task oldTask, Task updatedTask) {
+  void updateTask(Plan plan, Task oldTask, Task updatedTask) async {
     //params: plan is target, oldTask is target
     //find the old task with description and replace with new task
     print('in updateTask');
@@ -98,13 +125,17 @@ class PlanController extends StateNotifier<List<Plan>> {
         else
           p
     ];
+    await savePlansLocal(state);
   }
 
   ///unused
-  void deleteTask(Plan plan, Task task) => [
-        for (var t in plan.tasks!)
-          if (t.description! != task.description!) t
-      ];
+  void deleteTask(Plan plan, Task task) {
+    final List<Task> newTasks = [
+      for (var t in plan.tasks!)
+        if (t.description! != task.description!) t
+    ];
+    //state = state.copyWith()
+  }
 
   String showNumTasksComplete(Plan plan) {
     int completeCount = 0;

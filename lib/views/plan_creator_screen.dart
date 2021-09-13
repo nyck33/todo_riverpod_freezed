@@ -22,6 +22,16 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
   final textController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _loadPlans();
+  }
+
+  void _loadPlans() {
+    ref.read(plansProvider.notifier).loadState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //this gives me the List<Plan>
     final plans = ref.watch(plansProvider.notifier).state;
@@ -36,16 +46,41 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
       body: Column(
         children: <Widget>[
           _buildPlanCreator(), //textfield and func to add plan on tap
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: ElevatedButton(
-              onPressed: () {
-                ref
-                    .read(plansProvider.notifier)
-                    .savePlans(ref.read(plansProvider.notifier).state);
-              },
-              child: const Text('Save Plans'),
-            ),
+          Row(
+            children: [
+              /*
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    ref
+                        .read(plansProvider.notifier)
+                        .savePlans(ref.read(plansProvider.notifier).state);
+                  },
+                  child: const Text('Save Plans'),
+                ),
+              ),*/
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    ref.read(plansProvider.notifier).loadState();
+                  },
+                  child: const Text('Load SP'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    ref
+                        .read(plansProvider.notifier)
+                        .savePlansLocal(ref.read(plansProvider.notifier).state);
+                  },
+                  child: const Text('Save to SP'),
+                ),
+              ),
+            ],
           ),
           Expanded(child: _buildMasterPlans()),
         ],

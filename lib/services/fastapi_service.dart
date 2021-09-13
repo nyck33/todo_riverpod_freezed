@@ -11,7 +11,7 @@ import '../repositories/fastapi_repo.dart';
 class FastApiService {
   FastApiClient fastApiClient = FastApiClient();
 
-  List<Plan>? _plansList = [];
+  List<Map<String, dynamic>>? _plansList = [];
   List<http.Response> _responseList = [];
 
   FastApiService();

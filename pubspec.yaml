@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -30,12 +30,16 @@ dependencies:
   
   uuid:
   http: 
+
+  sqflite: ^2.0.0+4
+  path: 
   
   #json_annotation: ^4.0.1
   #freezed: ^0.14.0
   freezed_annotation: ^0.14.3
   #json_serializable: ^5.0.0
   built_value: 
+  shared_preferences: 2.0.7
 
 
 
