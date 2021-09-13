@@ -1,29 +1,22 @@
 # master_plan
 
-### シンプルですが、FreezedとRiverpodの機能を導入しまして、正常に実行でます。
+FastAPIのバックエンドはこちらです：https://github.com/nyck33/masterplan_fastapi_postgres
+テスト用にHerokuにデプロイしました：https://todo-fastapi-flutter.herokuapp.com/plan
+/planのパスにPostリクエスト（BodyがClass PlanのJson）
 
-###残っている課題：
-１．SharedPreferences及びその他の方法にてデータをセーブする。
-２．FastAPIのバックエンドに連携しまして、データを長期的にセーブする。
-３．バックエンドからデータを読む。
+### シンプルですが、FreezedとRiverpodの機能を導入しまして、正常に実行できます。
 
-###希望の課題
+###　残っている課題：
+１．SharedPreferences及びその他の方法にてデータをセーブする。現状ユーザーがアプリを離れますと、例としてAndroidホームスクリーンに一旦戻る、アプリの状態が最初に起動した状態にリセットされます。Riverpodの作者がこの機能は「今後追加するかもしれない」と教えてくれました：https://github.com/rrousselGit/river_pod/issues/735#issuecomment-917448464
+
+２．FastAPIが受信してからPostgresにアップロードする。
+
+３．Http.get、Postgresからデータを引き出す方はまだ書いてません。
+
+###　今後追加予定の機能は以下です：
+
 １．カレンダー機能
 ２．削除機能
 ３．ログイン機能
 
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
