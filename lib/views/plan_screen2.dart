@@ -28,6 +28,7 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
   //List<Task> get tasks => plan.planTasks;
   String get thisName => widget.planName;
 
+  /*
   @override
   void initState() {
     super.initState();
@@ -40,7 +41,7 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
   void _loadPlans() {
     ref.read(plansProvider.notifier).loadState();
   }
-
+  */
   @override
   Widget build(BuildContext context) {
     //this gives me the List<Plan>

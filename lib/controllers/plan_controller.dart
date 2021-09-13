@@ -28,17 +28,25 @@ class PlanController extends StateNotifier<List<Plan>> {
   //immutable list of plans
   List<Plan> get plans => List.unmodifiable(state);
 
+  /*
   void loadState() async {
+    print('loadiState controller');
     final plansJsons = await sharedPreferencesRepo.getPlans();
-    final List<Plan> plansList = [];
+    //final List<Plan> plansList = [];
     if (plansJsons != null) {
       for (Map<String, dynamic> p in plansJsons) {
-        plansList.add(Plan.fromJson(p));
+        //plansList.add(Plan.fromJson(p));
+        state.add(Plan.fromJson(p));
       }
     }
     print(
-        'controller load: plansList.length: ${plansList.length}, plansList: $plansList');
-    state = plansList;
+        'controller load: plansList.length: ${state.length}, plansList: $state');
+    //state = plansList;
+  }
+  */
+
+  void loadState(List<Plan>? updatedPlans) {
+    state = updatedPlans ?? [];
   }
 
   void addNewPlan(String name) {
@@ -55,11 +63,10 @@ class PlanController extends StateNotifier<List<Plan>> {
   ///unused
   void deletePlan(Plan plan) {
     //state.remove(plan);
-    List<Plan> newPlanList = [
+    state = [
       for (Plan p in state)
         if (p.name != plan.name) p
     ];
-    state = newPlanList;
 
     savePlansLocal(state);
   }
@@ -98,7 +105,7 @@ class PlanController extends StateNotifier<List<Plan>> {
     savePlansLocal(state);
   }
 
-  void updateTask(Plan plan, Task oldTask, Task updatedTask) async {
+  void updateTask(Plan plan, Task oldTask, Task updatedTask) {
     //params: plan is target, oldTask is target
     //find the old task with description and replace with new task
     print('in updateTask');
@@ -125,7 +132,7 @@ class PlanController extends StateNotifier<List<Plan>> {
         else
           p
     ];
-    await savePlansLocal(state);
+    savePlansLocal(state);
   }
 
   ///unused

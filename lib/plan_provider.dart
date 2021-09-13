@@ -34,7 +34,7 @@ Future<List<Plan>> getSharedPrefs() async {
 //  (ref) => PlanController((List<Plan>)getSharedPrefs() ?? []));
 
 final plansProvider = StateNotifierProvider<PlanController, List<Plan>>(
-    (ref) => PlanController([])..loadState());
+    (ref) => PlanController([])); //..loadState());
 
 /*
 final plansProvider = StateNotifierProvider<PlanController, List<Plan>>((ref) {

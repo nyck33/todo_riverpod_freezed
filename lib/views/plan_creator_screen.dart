@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/data_layer.dart';
 import '../plan_provider.dart';
 import './plan_screen2.dart';
 
 class PlanCreatorScreen extends ConsumerStatefulWidget {
-  const PlanCreatorScreen({Key? key}) : super(key: key);
+  final SharedPreferences? prefs;
+
+  const PlanCreatorScreen({Key? key, required this.prefs}) : super(key: key);
 
   @override
   _PlanCreatorScreenState createState() => _PlanCreatorScreenState();
@@ -21,6 +24,7 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
   //for creating simple Textfields for new plans
   final textController = TextEditingController();
 
+  /*
   @override
   void initState() {
     super.initState();
@@ -30,6 +34,7 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
   void _loadPlans() {
     ref.read(plansProvider.notifier).loadState();
   }
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +69,7 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    ref.read(plansProvider.notifier).loadState();
+                    //ref.read(plansProvider.notifier).loadState();
                   },
                   child: const Text('Load SP'),
                 ),
