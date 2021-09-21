@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -17,29 +16,48 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences? prefs = await SharedPreferences.getInstance();
 
+  List<Plan> plansFromSP = [];
+  final List<dynamic>? plansJsons;
+  final String plansKey = "plans";
+
+  try {
+    plansJsons = jsonDecode(prefs?.getString(plansKey) ?? '[]');
+    print('loadStateEarly plansJson: $plansJsons');
+    //final List<Plan> plansArr = [];
+    //return plansJsons;
+    if (plansJsons != null) {
+      for (Map<String, dynamic> p in plansJsons) {
+        //plansList.add(Plan.fromJson(p));
+        plansFromSP.add(Plan.fromJson(p));
+      }
+    }
+    // plansArr;
+  } catch (err) {
+    print('repo getPlans error: $err');
+  }
+
   //create local
-  runApp(ProviderScope(child: MasterPlanApp(prefs: prefs)));
+  runApp(ProviderScope(child: MasterPlanApp(plans: plansFromSP)));
 }
 
 class MasterPlanApp extends ConsumerStatefulWidget {
-  SharedPreferences? prefs;
-  MasterPlanApp({Key? key, required this.prefs}) : super(key: key);
+  //SharedPreferences? prefs;
+  List<Plan>? plans;
+  MasterPlanApp({Key? key, required this.plans}) : super(key: key);
   @override
-  _MasterPlanAppState createState() =>
-      _MasterPlanAppState(prefs: prefs, plansFromSP: []);
+  _MasterPlanAppState createState() => _MasterPlanAppState(plansFromSP: plans);
 }
 
 class _MasterPlanAppState extends ConsumerState<MasterPlanApp> {
-  SharedPreferences? prefs;
-  List<Plan> plansFromSP = [];
+  //SharedPreferences? prefs;
+  List<Plan>? plansFromSP = [];
 
-  _MasterPlanAppState(
-      {Key? key, required this.prefs, required this.plansFromSP});
+  _MasterPlanAppState({Key? key, required this.plansFromSP});
 
   @override
   initState() {
     super.initState();
-    if (prefs != null) loadStateEarly(prefs);
+    //if (prefs != null) loadStateEarly(prefs);
   }
 
   void loadStateEarly(SharedPreferences? prefs) {
@@ -56,7 +74,7 @@ class _MasterPlanAppState extends ConsumerState<MasterPlanApp> {
       if (plansJsons != null) {
         for (Map<String, dynamic> p in plansJsons) {
           //plansList.add(Plan.fromJson(p));
-          plansFromSP.add(Plan.fromJson(p));
+          plansFromSP?.add(Plan.fromJson(p));
         }
       }
       // plansArr;
@@ -74,7 +92,7 @@ class _MasterPlanAppState extends ConsumerState<MasterPlanApp> {
 
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.purple),
-      home: PlanCreatorScreen(prefs: prefs),
+      home: PlanCreatorScreen(),
     );
   }
 }

@@ -10,9 +10,7 @@ import '../plan_provider.dart';
 import './plan_screen2.dart';
 
 class PlanCreatorScreen extends ConsumerStatefulWidget {
-  final SharedPreferences? prefs;
-
-  const PlanCreatorScreen({Key? key, required this.prefs}) : super(key: key);
+  const PlanCreatorScreen({Key? key}) : super(key: key);
 
   @override
   _PlanCreatorScreenState createState() => _PlanCreatorScreenState();
@@ -20,21 +18,22 @@ class PlanCreatorScreen extends ConsumerStatefulWidget {
 
 class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
   //List<Plan> _plans; //= ref.watch(plansProvider.notifier);
-
+  late final SharedPreferences? prefs; //= getSharedPreferences();
   //for creating simple Textfields for new plans
   final textController = TextEditingController();
 
-  /*
   @override
   void initState() {
     super.initState();
-    _loadPlans();
+    //_loadPlans();
   }
 
-  void _loadPlans() {
-    ref.read(plansProvider.notifier).loadState();
+  Future<void>? getSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
   }
-  */
+  //void _loadPlans() {
+  //ref.read(plansProvider.notifier).loadState();
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,6 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
           _buildPlanCreator(), //textfield and func to add plan on tap
           Row(
             children: [
-              /*
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
@@ -62,10 +60,10 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
                         .read(plansProvider.notifier)
                         .savePlans(ref.read(plansProvider.notifier).state);
                   },
-                  child: const Text('Save Plans'),
+                  child: const Text('Save FastAPI'),
                 ),
-              ),*/
-              Padding(
+              ),
+              /*Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
                   onPressed: () {
@@ -84,7 +82,7 @@ class _PlanCreatorScreenState extends ConsumerState<PlanCreatorScreen> {
                   },
                   child: const Text('Save to SP'),
                 ),
-              ),
+              ),*/
             ],
           ),
           Expanded(child: _buildMasterPlans()),

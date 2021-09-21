@@ -40,6 +40,9 @@ dependencies:
   #json_serializable: ^5.0.0
   built_value: 
   shared_preferences: 2.0.7
+  # new for coupon
+  bottom_navy_bar: ^6.0.0
+
 
 
 
