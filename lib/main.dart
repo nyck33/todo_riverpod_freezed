@@ -12,6 +12,22 @@ import './repositories/shared_prefs_repo.dart';
 import './models/data_layer.dart';
 import './views/plan_creator_screen.dart';
 
+class Logger extends ProviderObserver {
+  @override
+  void didUpdateProvider(
+    ProviderBase provider,
+    Object? previousValue,
+    Object? newValue,
+    ProviderContainer container,
+  ) {
+    print('''
+    {
+      "provider": "${provider.name ?? provider.runtimeType}",
+      "newValue": "$newValue"
+  }''');
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences? prefs = await SharedPreferences.getInstance();
@@ -37,7 +53,8 @@ void main() async {
   }
 
   //create local
-  runApp(ProviderScope(child: MasterPlanApp(plans: plansFromSP)));
+  runApp(ProviderScope(
+      observers: [Logger()], child: MasterPlanApp(plans: plansFromSP)));
 }
 
 class MasterPlanApp extends ConsumerStatefulWidget {

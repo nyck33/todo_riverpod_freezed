@@ -44,7 +44,7 @@ class PlanController extends StateNotifier<List<Plan>> {
     //state = plansList;
   }
   */
-
+  //unused
   void loadState(List<Plan>? updatedPlans) {
     state = updatedPlans ?? [];
   }
